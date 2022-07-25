@@ -18,37 +18,66 @@ btnDivide = document.querySelector('#divide')
 btnEqual = document.querySelector('#equal')
 btnClear = document.querySelector('#clear')
 btnDelete = document.querySelector('#delete')
+display = document.querySelector('#display')
 //
-btn1.onclick = (e) => calculateArray.push(e.target.textContent)
-btn2.onclick = (e) => calculateArray.push(e.target.textContent)
-btn3.onclick = (e) => calculateArray.push(e.target.textContent)
-btn4.onclick = (e) => calculateArray.push(e.target.textContent)
-btn5.onclick = (e) => calculateArray.push(e.target.textContent)
-btn6.onclick = (e) => calculateArray.push(e.target.textContent)
-btn7.onclick = (e) => calculateArray.push(e.target.textContent)
-btn8.onclick = (e) => calculateArray.push(e.target.textContent)
-btn9.onclick = (e) => calculateArray.push(e.target.textContent)
-btn0.onclick = (e) => calculateArray.push(e.target.textContent)
+btn1.onclick = update
+btn2.onclick = update
+btn3.onclick = update
+btn4.onclick = update
+btn5.onclick = update
+btn6.onclick = update
+btn7.onclick = update
+btn8.onclick = update
+btn9.onclick = update
+btn0.onclick = update
 btnDecimal.onclick = (e) => calculateArray.push(e.target.textContent)
-btnAdd.onclick = (e) => {
-    if (calculateArray.length === 3) {
-        let temp = operate(parseInt(calculateArray[0]), calculateArray[1], parseInt(calculateArray[2]))
-        console.log(temp)
-        calculateArray = []
-        calculateArray.push(temp)
-    }
-    calculateArray.push(e.target.textContent)
+btnAdd.onclick = evaluate
+btnMinus.onclick = evaluate
+btnMultiple.onclick = evaluate
+btnDivide.onclick = evaluate
+btnEqual.onclick = evaluate
+btnClear.onclick = () => {
+    calculateArray = []
+    //display.textContent = displayStr
 }
-btnMinus.onclick = (e) => calculateArray.push(e.target.textContent)
-btnMultiple.onclick = (e) => calculateArray.push(e.target.textContent)
-btnDivide.onclick = (e) => calculateArray.push(e.target.textContent)
-btnClear.onclick = (e) => calculateArray.push(e.target.textContent)
-btnDelete.onclick = (e) => calculateArray.push(e.target.textContent)
-btnEqual.onclick = operate(parseInt(calculateArray[0]), calculateArray[1], parseInt(calculateArray[2]))
+btnDelete.onclick = () => {
+    calculateArray.pop()
+    //display.textContent = displayStr
+}
 //
+function update(e) {
+    calculateArray.push(e.target.textContent)
+    display.textContent = calculateArray.join('')
+}
+
+function error() {
+    calculateArray = []
+    display.textContent = 'ERROR!'
+}
+
+function evaluate(e) {
+    if (calculateArray.length >= 3) {
+        let temp = operate(+calculateArray[0], calculateArray[1], +calculateArray[2])
+        calculateArray = []
+        if (temp) {
+            calculateArray.push(temp)
+            if (e.target.textContent != '=') calculateArray.push(e.target.textContent)
+            display.textContent = `${calculateArray.join('')}\u00A0\u00A0\u00A0\u00A0result:${temp}`
+        } 
+    } else {
+        if (e.target.textContent === '=') error()
+        else {
+            calculateArray.push(e.target.textContent)
+            display.textContent = calculateArray.join('')
+        }
+    }
+}
+
 function operate(n1, operator, n2) {
+    if (isNaN(n1) || isNaN(n2)) error()
     if (operator === '+') return n1+n2
     else if (operator === '-') return n1-n2
     else if (operator === '*') return n1*n2
     else if (operator === '/') return n1/n2
+    else error()
 }
