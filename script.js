@@ -59,7 +59,8 @@ function error() {
 }
 
 function notNumber(num) {
-    if (isNaN(num) && num != '.') return true
+    if (isNaN(num) && num != '.' && num != this) return true
+
 }
 
 function evaluate(e) {
@@ -68,10 +69,13 @@ function evaluate(e) {
     let indexOfOp = calculateArray.findIndex(notNumber)
     let n1 = calculateArray.slice(0, indexOfOp).join('')
     let operator = calculateArray[indexOfOp]
-    let n2 = calculateArray.slice(indexOfOp+1, calculateArray.length-1).join('')
-    let temp
+    let n2 = calculateArray.slice(indexOfOp+1, calculateArray.findIndex(notNumber, operator)).join('')
+    if (operator === '=' && (!n1 || !n2)) {
+        error()
+        return
+    }
     if (n1 && n2) {
-        temp = operate(+n1, operator, +n2)
+        let temp = operate(+n1, operator, +n2)
         if (temp) {
             calculateArray = []
             calculateArray.push(temp)
