@@ -49,6 +49,7 @@ btnDelete.onclick = () => {
 }
 //
 function update(e) {
+    if (e.target.textContent === '.' && calculateArray.includes('.')) return
     calculateArray.push(e.target.textContent)
     expression.textContent = calculateArray.join('')
 }
@@ -77,11 +78,11 @@ function evaluate(e) {
     if (n1 && n2) {
         let temp = operate(+n1, operator, +n2)
         if (temp) {
+            expression.textContent = calculateArray.join('')
             calculateArray = []
             calculateArray.push(temp)
             if (btnValue != '=') calculateArray.push(btnValue)
             result.textContent = temp
-            expression.textContent = calculateArray.join('')
         }
     } else expression.textContent = calculateArray.join('')
 }
@@ -91,7 +92,7 @@ function operate(n1, operator, n2) {
     else {
         if (operator === '+') return n1+n2
         else if (operator === '-') return n1-n2
-        else if (operator === '*') return n1*n2
-        else if (operator === '/') return n1/n2
+        else if (operator === '×') return n1*n2
+        else if (operator === '÷') return n1/n2
     }
 }
